@@ -1,0 +1,75 @@
+.u-section-1.body{
+  background-image:url("https://img.wallpapersafari.com/desktop/1600/900/87/68/8YWJtC.jpg");
+  background-position: 50% 50%;
+  background-color: red;
+}
+
+.u-section-1 .u-sheet-1 {
+  min-height: 867px;
+  color: black;
+}
+
+.u-section-1 .u-text-1 {
+  font-size: 6rem;
+  font-weight: 700;
+  background-image: none;
+  margin: 273px auto 0;
+  color: black;
+}
+
+.u-section-1 .u-text-2 {
+  margin: 31px auto 0;
+  color: black;
+}
+
+.u-section-1 .u-btn-1 {
+  background-image: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 40px auto 0;
+}
+
+.u-section-1 .u-form-1 {
+  width: 570px;
+  margin: 40px auto 60px;
+}
+
+@media (max-width: 1199px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 715px;
+  }
+}
+
+@media (max-width: 991px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 548px;
+  }
+}
+
+@media (max-width: 767px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 411px;
+  }
+
+  .u-section-1 .u-text-1 {
+    font-size: 3.75rem;
+  }
+
+  .u-section-1 .u-form-1 {
+    width: 540px;
+  }
+}
+
+@media (max-width: 575px) {
+  .u-section-1 .u-sheet-1 {
+    min-height: 259px;
+  }
+
+  .u-section-1 .u-text-1 {
+    font-size: 3rem;
+  }
+
+  .u-section-1 .u-form-1 {
+    width: 340px;
+  }
+}

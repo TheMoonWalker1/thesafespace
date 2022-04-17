@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compliments</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = 'stylesheet' href = 'css/style.css'>
+    <!-- Import the webpage's stylesheet -->
+</head>  
+<body>
+    <video id="webcam" autoplay muted></video> <br>
+    <p id='compliment'>You seem <span style="color:lightcoral">happy.</span> Whoa, your outfit is so amazing!</p>
+    
+    {{!--<img id = 'img'>--}}
+    <a id = 'home' href = '/'>Back to home</a>
+</body>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity=
+    "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+    crossorigin="anonymous"></script>
+<script type=text/javascript>
+    const VIDEO = document.getElementById('webcam');
+    const MOBILE_NET_INPUT_WIDTH = 224;
+    const MOBILE_NET_INPUT_HEIGHT = 224;
+    var img = document.createElement('img');
+    
+    angryList = ['Within you, there is a stillness and a sanctuary to which you can retreat at any time and be yourself.', 'Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor.', 'Calmness is the cradle of power.', 'Don’t try to force anything. Let life be a deep let-go. God opens millions of flowers every day without forcing their buds.', 'Give your stress wings and let it fly away.', 'The more tranquil a man becomes, the greater is his success, his influence, his power for good. Calmness of mind is one of the beautiful jewels of wisdom.']
+    fearfulList = ['Courage is not the absence of fear but rather the assessment that something else is more important than fear.', 'Courage starts with showing up and letting ourselves be seen.', 'Courage is being scared to death … and saddling up anyway.', 'You cannot swim for new horizons until you have courage to lose sight of the shore.', 'Life shrinks or expands in proportion to one’s courage.', 'The opposite of courage is not cowardice; it is conformity. Even a dead fish can go with the flow.', 'I learned that courage was not the absence of fear but the triumph over it. The brave man is not he who does not feel afraid but he who conquers that fear.', 'Courage doesn’t always roar. Sometimes courage is the little voice at the end of the day that says I’ll try again tomorrow.']
+    happyList = ['Whoa, your outfit is so amazing!', "I love your sense of style.",  "I'm so into the way you did your hair! Could you teach me sometime?", "Well, don't you have a spring in your step today?!", "Seriously, your skin has the best glow.", "You look so happy!", 'On a scale from 1 to 10, you’re an 11', 'You’re gorgeous — and that’s the least interesting thing about you, too', 'Has anyone ever told you that you have great posture?', 'There’s ordinary, and then there’s you']
+    sadList = ['"Why do fathers take an extra pair of socks when they go golfing?" "In case they get a hole in one!"', '"What do a tick and the Eiffel Tower have in common?" "They\'re both Paris sites."', '"How do you follow Will Smith in the snow?" "You follow the fresh prints."', '"Why do seagulls fly over the ocean?" "Because if they flew over the bay, we\'d call them bagels."', '"I only know 25 letters of the alphabet. I don\'t know y."', '"How does the moon cut his hair?" "Eclipse it."', '"What did the zero say to the eight?" "That belt looks good on you."', '"What did Baby Corn say to Mama Corn?" "Where\'s Pop Corn?"', '"What\'s the best thing about Switzerland?" "I don\'t know, but the flag is a big plus."', '"My wife is really mad at the fact that I have no sense of direction. So I packed up my stuff and right!"', '"Why don\'t eggs tell jokes? They\'d crack each other up."', '"Why did Billy get fired from the banana factory? He kept throwing away the bent ones."', '"What does a lemon say when it answers the phone?" "Yellow!"', '"What time did the man go to the dentist? Tooth hurt-y."', '"What do you call cheese that isn\'t yours? Nacho cheese."']
+    surprisedList = ["Surprised our site is so good aren't you"]
+    neutralList = ['Have a good day :)']
+    
+    enableCam()
+    var interval = window.setInterval(snap, 10000)
+    
+    
+    function hasGetUserMedia() {
+        return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    }
+    
+    function snap() {
+        /*const vid = document.querySelector('video');
+        navigator.mediaDevices.getUserMedia({video: true}) // request cam
+        .then(stream => {
+          vid.srcObject = stream; // don't use createObjectURL(MediaStream)
+          return vid.play(); // returns a Promise
+        })
+        .then(()=>{ // enable the button
+          const btn = document.querySelector('button');
+          btn.disabled = false;
+          btn.onclick = e => {
+            takeASnap().then(download);
+          };
+        }).catch(e=>console.log('please use the fiddle instead'));*/
+        
+        const video = document.getElementById('webcam');
+
+        const canvas = document.createElement("canvas");
+        // scale the canvas accordingly
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        // draw the video at that frame
+        canvas.getContext('2d')
+          .drawImage(video, 0, 0, canvas.width, canvas.height);
+        // convert it to a usable data URL
+        const dataURL = canvas.toDataURL();
+        
+        //img.src = dataURL;
+        
+        getEmotion(dataURL)
+        //possEmotions = ['angry', 'disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
+    }
+    
+    function getEmotion(dataURL) {
+        /*$(document).ready(function() {
+            $.post("/ml_model",
+            {
+                image: img
+            },
+            function(data, status) {
+                console.log(data);
+            });
+        });*/
+        var ajax_params = {
+            'url': url, //url with emotions here
+            'type': 'get',
+            'success': getEmotionHelper,
+            'data': {dataURL}
+        }
+        $.ajax(ajax_params)
+    }
+    
+    function getEmotionHelper(response) {
+        list = []
+        if (response == 'angry') {
+            list = angryList
+        }
+        else if (response == 'fearful') {
+            list = fearfulList
+        }
+        else if (response == 'happy') {
+            list = happyList
+        }
+        else if (response == 'sad') {
+            list = sadList
+        }
+        else if (response == 'surprised') {
+            list = surprisedList
+        }
+        else if (response == 'neutral') {
+            list = neutralList
+        }
+        
+        const toDisplay = list[Math.floor(Math.random() * list.length)]
+        
+        document.getElementById('compliment').innerHTML = toDisplay
+    }
+    
+    /*function takeASnap(){
+        const canvas = document.createElement('canvas'); // create a canvas
+        const ctx = canvas.getContext('2d'); // get its context
+        canvas.width = vid.videoWidth; // set its size to the one of the video
+        canvas.height = vid.videoHeight;
+        ctx.drawImage(vid, 0,0); // the video
+        return new Promise((res, rej)=>{
+            canvas.toBlob(res, 'image/jpeg'); // request a Blob from the canvas
+        });
+    }*/
+    
+    function enableCam() {
+        if (hasGetUserMedia()) {
+            console.log('hasGetUserMedia')
+            navigator.permissions.query({ name: "camera" }).then(res => {
+                if(res.state == "granted"){
+                    console.log(navigator.mediaDevices)
+                    // getUsermedia parameters.
+                    const constraints = {
+                        video: true,
+                        width: 640, 
+                        height: 480 
+                    };
+                    
+                    // Activate the webcam stream.
+                    navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                        VIDEO.srcObject = stream;
+                        VIDEO.addEventListener('loadeddata', function() {
+                            videoPlaying = true;
+                        });
+                    });
+                } 
+                else {
+                    //alert("Please Allow Camera Permissions");
+                }
+            })
+        }
+        else {
+            console.log('getUserMedia() is not supported by your browser');
+        }
+    }
+    
+</script>
+</html>
