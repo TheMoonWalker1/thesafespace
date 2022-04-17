@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "bree": "^8.0.3",
+    "cron": "^1.8.2",
+    "express": "^4.17.3",
+    "handlebars": "^4.7.7",
+    "hbs": "^4.2.0",
+    "Math": "*",
+    "mysql": "^2.18.1",
+    "navigator": "^1.0.1",
+    "node-schedule": "^2.1.0",
+    "twilio": "^3.76.1",
+    "uglify": "^0.1.5"
+  }
+}
